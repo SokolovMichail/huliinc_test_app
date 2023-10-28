@@ -11,6 +11,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
     is_verified= models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    user_information = models.CharField(default="")
 
     class Meta:
         verbose_name = _('user')
@@ -23,12 +24,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-    def email_user(self, subject, message, from_email=None, **kwargs):
-        '''
-        Sends an email to this User.
-        '''
-        pass
 
 class CustomUserSerializer(serializers.Serializer):
     email = serializers.CharField()
