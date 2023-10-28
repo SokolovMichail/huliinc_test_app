@@ -13,7 +13,8 @@ from huliinc_users.models import CustomUserSerializer
 
 
 class UserApiView(APIView):
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
+    serializer = CustomUserSerializer()
 
     def get(self,request):
         user = get_user_model()
@@ -21,13 +22,10 @@ class UserApiView(APIView):
         return HttpResponse(data,status=200)
 
     def post(self,request):
-        serializer = CustomUserSerializer()
-        result = serializer.validate(request.data)
+        result = self.serializer.validate(request.data)
         if result:
             User = get_user_model()
-            user = User.objects.create_user(email=result['email'], password=result['password'])
-
-
+            User.objects.create_user(email=result['email'], password=result['password'])
         return HttpResponse(status=200)
 
     def patch(self,request):
