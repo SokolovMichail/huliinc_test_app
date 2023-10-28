@@ -11,7 +11,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
     is_verified= models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
-    user_information = models.CharField(default="")
+    user_information = models.CharField(default="",max_length=256)
 
     class Meta:
         verbose_name = _('user')
