@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  postfix:
+    image: takeyamajp/postfix
+    ports:
+      - "8025:25"
+      - "8587:587"
+      - "8465:465"
+    volumes:
+      - ./certs:/ssl_certs
+      - ./keys:/dkim_keys
+    environment:
+      TIMEZONE: "Asia/Tokyo"
+      HOSTNAME: "smtp.huliinctestapp.test"
+      DOMAIN_NAME: "huliinctestapp.test"
+      MESSAGE_SIZE_LIMIT: "10240000"
+      AUTH_USER: "user"
+      AUTH_PASSWORD: "password"
+      DISABLE_SMTP_AUTH_ON_PORT_25: "true"
+      ENABLE_DKIM: "true"
+      DKIM_KEY_LENGTH: "1024"
+      DKIM_SELECTOR: "default"

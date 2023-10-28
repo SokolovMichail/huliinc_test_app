@@ -29,3 +29,8 @@ class CustomUserSerializer(serializers.Serializer):
     email = serializers.CharField()
     is_verified = serializers.BooleanField(default=False)
     password = serializers.CharField()
+
+class CustomUserViewSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    is_verified = serializers.BooleanField(default=False)
+    user_information = serializers.CharField()
