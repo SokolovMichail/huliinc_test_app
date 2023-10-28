@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-35*pqab-w1kp97873m(_l&eg-=hi&2me!9c5)j35*gl20jtm#a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -147,3 +147,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_PROFILE_MODULE = 'huliinc_users.CustomUser'
 
 AUTH_USER_MODEL = 'huliinc_users.CustomUser'
+
+EMAIL_HOST = '127.0.0.1'
+
+EMAIL_PORT = '25'
+
+#EMAIL_HOST_USER = 'user'
+
+#EMAIL_HOST_PASSWORD = 'password'

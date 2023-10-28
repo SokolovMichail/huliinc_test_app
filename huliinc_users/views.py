@@ -3,6 +3,7 @@ import json
 import django.db.utils
 from django.core import serializers as srs, serializers
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -11,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from huliinc_users.models import CustomUserSerializer, CustomUserViewSerializer, CustomUser
+from huliinc_users.send_email import EmailSender
 
 
 class UserApiView(APIView):
@@ -28,9 +30,9 @@ class UserApiView(APIView):
         if result:
             User = get_user_model()
             try:
-
                 User.objects.create_user(email=result['email'], password=result['password'],
                                          user_information=result['user_information'])
+                EmailSender.send_email(result['email'],request)
             except django.db.utils.IntegrityError:
                 return HttpResponse("User with this email already exists", status=409)
         return HttpResponse(status=200)
@@ -64,7 +66,7 @@ class MeApiView(APIView):
 
 
 class RegisterApiView(APIView):
-    def post(self, request):
+    def get(self, request):
         email_to_auth = request.query_params['email']
         User = get_user_model()
         try:
