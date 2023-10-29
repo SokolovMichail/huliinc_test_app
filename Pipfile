@@ -10,6 +10,7 @@ djangorestframework-simplejwt = "*"
 django-rest-swagger = "*"
 drf-yasg = "*"
 mailjet_rest = "*"
+apscheduler = "*"
 
 [dev-packages]
 

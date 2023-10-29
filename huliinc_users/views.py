@@ -32,7 +32,7 @@ class UserApiView(APIView):
             try:
                 User.objects.create_user(email=result['email'], password=result['password'],
                                          user_information=result['user_information'])
-                EmailSender.send_email(result['email'],request)
+                EmailSender.send_registration_email(result['email'], request)
             except django.db.utils.IntegrityError:
                 return HttpResponse("User with this email already exists", status=409)
         return HttpResponse(status=200)
