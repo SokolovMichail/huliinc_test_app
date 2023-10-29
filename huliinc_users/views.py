@@ -21,9 +21,10 @@ class UserApiView(APIView):
 
     def get(self, request):
         user = get_user_model()
-        data = [CustomUserViewSerializer(x).data for x in user.objects.all()]
-        return HttpResponse(data,
-                            status=200, content_type="application/json")
+        t = user.objects.filter(is_verified=True)
+        data = {"users": [CustomUserViewSerializer(x).data for x in user.objects.all()]}
+        return JsonResponse(data,
+                            status=200)
 
     def post(self, request):
         result = self.serializer.validate(request.data)
@@ -58,11 +59,8 @@ class MeApiView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        data = {
-            "email": request.user.email,
-            "is_verified": request.user.is_verified
-        }
-        return HttpResponse(json.dumps(data), status=200)
+        data = CustomUserViewSerializer(request.user).data
+        return JsonResponse(data, status=200,  content_type="application/json")
 
 
 class RegisterApiView(APIView):
@@ -71,7 +69,7 @@ class RegisterApiView(APIView):
         User = get_user_model()
         try:
             user_to_verify = User.objects.get(email=email_to_auth)
-            user_to_verify.is_verified = True
+            user_to_verify.is_verified= True
             user_to_verify.save()
             return HttpResponse(status=200)
         except User.DoesNotExist:
