@@ -10,7 +10,7 @@ from huliinc_users.models import CustomUser
 def confirm_send_email(var):
     var.append('OK')
 
-class AnimalTestCase(TestCase):
+class ViewTestCase(TestCase):
     def setUp(self):
         CustomUser.objects.create_user(email="a@b.com", password="123",user_information="IamUser")
         CustomUser.objects.create_user(email="b@c.com", password="123", user_information="IamUser2",is_verified=True)
@@ -47,7 +47,6 @@ class AnimalTestCase(TestCase):
         assert user.is_verified
 
     def test_user_patch_case(self):
-        email_sent_flag = []
         response = self.client.patch(
             "/api/users",
             data = {
@@ -57,11 +56,45 @@ class AnimalTestCase(TestCase):
             },
             content_type="application/json"
         )
-        print(response.status_code)
         assert response.status_code == 200
         user = CustomUser.objects.get(email='b@c.com')
         assert user.user_information == "Test User in Fixture"
         assert user.check_password("1234")
+
+    def test_user_token(self):
+        response = self.client.post(
+            "/api/users/token",
+            data={
+                "email": "b@c.com",
+                "password": "12",
+            },
+            content_type="application/json"
+        )
+        assert response.status_code == 401
+        response = self.client.post(
+            "/api/users/token",
+            data={
+                "email": "b@c.com",
+                "password": "123",
+            },
+            content_type="application/json"
+        )
+        assert response.status_code == 200
+        data = json.loads(response.content.decode())
+        token = data['access']
+        response = self.client.get(
+            "/me",
+            data={
+                "email": "b@c.com",
+            },
+            headers={
+                "Authorization":f"Bearer {token}"
+            },
+            content_type="application/json"
+        )
+        assert response.status_code == 200
+        data = json.loads(response.content.decode())
+        assert data['user_information'] == "IamUser2"
 
 
 
