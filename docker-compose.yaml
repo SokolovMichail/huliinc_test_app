@@ -2,21 +2,14 @@ version: '3.7'
 
 services:
   server:
-    command: "python3 manage.py runserver"
+    command: "python3 manage.py runserver 0.0.0.0:8000 --noreload"
     ports:
       - "8000:8000"
+    env_file:
+      - vars.env
     image: huliinc_django
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - ./:/app
-    networks:
-      - huliinc_net
-
-networks:
-  huliinc_net:
-    driver: bridge
-    driver_opts:
-      com.docker.network.enable_ipv6: "false"
-      com.docker.network.bridge.name: "r_docker_net"

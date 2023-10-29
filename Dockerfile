@@ -1,5 +1,10 @@
 FROM python:3.10-bookworm
 
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update
+RUN apt-get -y install cron
+
 RUN pip3 install pipenv
 
 COPY Pipfile Pipfile
